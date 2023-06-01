@@ -13,9 +13,9 @@
     const baseDatos = window.indexedDB.open('crm', 1);
 
     baseDatos.onupgradeneeded = () => {
-      const bd = baseDatos.result;
-      const objecStore = bd.createObjectStore('crm', {
-        keyPath: id,
+      DB = baseDatos.result;
+      const objecStore = DB.createObjectStore('crm', {
+        keyPath: 'id',
         autoIncrement: true,
       });
 
@@ -24,6 +24,8 @@
       objecStore.createIndex('telefono', 'telefono', { unique: false });
       objecStore.createIndex('empresa', 'empresa', { unique: false });
       objecStore.createIndex('id', 'id', { unique: true });
+
+      console.log('tblas creadas');
     };
 
     // Cuando hay un error al crear la base de datos

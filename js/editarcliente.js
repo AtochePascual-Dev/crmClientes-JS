@@ -78,8 +78,62 @@
 
     // Validamos si exiten valores vacios
     if ([nombre, correo, telefono, empresa].includes('')) {
-      console.log('error');
+      imprimirAlerta('Todos los campos son obligatorios', false);
       return;
     };
+
+    // crea un cliente actualizado
+    const cliente = {
+      nombre,
+      correo,
+      telefono,
+      empresa,
+      id: Number(id)
+    };
+
+    // Actualiza el cliente
+    const transaction = DB.transaction(['crm'], 'readwrite');
+    const objectStore = transaction.objectStore('crm');
+
+    objectStore.put(cliente);
+
+    // si hay un error
+    transaction.onerror = () => {
+      imprimirAlerta('Error al editr cliente', false);
+    };
+
+    // cuando todo sale bien
+    transaction.oncomplete = () => {
+      imprimirAlerta('Cliente actualizado corrrectamente');
+
+      setTimeout(() => {
+        window.location.href = '../index.html';
+      }, 1500);
+    };
+  };
+
+
+
+  //* Imprime una alerta en pantalla
+  const imprimirAlerta = (mensaje, exito = true) => {
+    const existeAlerta = document.querySelector('.alerta');
+
+    if (existeAlerta) return;
+
+    const divAlerta = document.createElement('div');
+    divAlerta.textContent = mensaje;
+    divAlerta.classList.add('px-4', 'py-3', 'rounded', 'max-w-lg', 'mx-auto', 'text-center', 'border', 'mt-6', 'alerta');
+
+    (exito)
+      ? divAlerta.classList.add('bg-green-100', 'border-green-400', 'text-green-700')
+      : divAlerta.classList.add('bg-red-100', 'border-red-400', 'text-red-700');
+
+    // Mostramos la lerta en pantalla
+    formulario.appendChild(divAlerta);
+
+    // Eliminamos la alerta
+    setTimeout(() => {
+      divAlerta.remove();
+    }, 3000);
   };
 })();

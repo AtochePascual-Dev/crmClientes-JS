@@ -36,11 +36,22 @@
     const telefono = document.querySelector('#telefono').value;
     const empresa = document.querySelector('#empresa').value;
 
-    // Valdamos si existen vacios
+    // Validamos si existen vacios
     if ([nombre, correo, telefono, empresa].includes('')) {
       imprimirAlerta('Todos los campos son obligatorios', false);
       return;
     }
+
+    // crear un objeto con la informacion
+    const cliente = {
+      nombre,
+      correo,
+      telefono,
+      empresa,
+      id: Date.now()
+    };
+
+    crearCliente(cliente);
   };
 
 
@@ -66,5 +77,30 @@
     setTimeout(() => {
       divAlerta.remove();
     }, 3000);
+  };
+
+
+
+  //* crear un cliente en la base de datos
+  const crearCliente = (cliente) => {
+    const transaction = DB.transaction(['crm'], 'readwrite');
+    const objecStore = transaction.objectStore('crm');
+
+    // agregamos el cliente a la bd
+    objecStore.add(cliente);
+
+    // si hay un error
+    transaction.onerror = () => {
+      imprimirAlerta('Error al crear cliente, correo ya fue registrado', false);
+    };
+
+    // cuando todo sale bien
+    transaction.oncomplete = () => {
+      imprimirAlerta('Cliente agregado corrrectamente');
+
+      setTimeout(() => {
+        window.location.href = '../index.html';
+      }, 1500);
+    };
   };
 })();

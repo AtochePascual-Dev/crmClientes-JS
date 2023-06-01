@@ -55,4 +55,14 @@
     };
   };
 
+
+  // * llena los datos del formulario
+  const llenarFormulario = (cliente) => {
+    const { nombre, correo, telefono, empresa } = cliente;
+
+    inputNombre.value = nombre;
+    inputCorreo.value = correo;
+    inputTelefono.value = telefono;
+    inputEmpresa.value = empresa;
+  };
 })();

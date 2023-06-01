@@ -65,4 +65,21 @@
     inputTelefono.value = telefono;
     inputEmpresa.value = empresa;
   };
+
+
+  // * Actualiza un cliente en la BD
+  const actualizarCaliente = (event) => {
+    event.preventDefault();
+
+    const nombre = inputNombre.value;
+    const correo = inputCorreo.value;
+    const telefono = inputTelefono.value;
+    const empresa = inputEmpresa.value;
+
+    // Validamos si exiten valores vacios
+    if ([nombre, correo, telefono, empresa].includes('')) {
+      console.log('error');
+      return;
+    };
+  };
 })();
